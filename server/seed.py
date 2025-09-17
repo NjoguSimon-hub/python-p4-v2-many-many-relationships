@@ -3,7 +3,7 @@
 
 import datetime
 from app import app
-from models import db, Employee, Meeting, Project
+from models import db, Employee, Meeting, Project, Assignment
 
 with app.app_context():
 
@@ -39,5 +39,15 @@ with app.app_context():
     db.session.commit()
 
     # Many-to-many relationship between employee and meeting
-
+    e1.meetings.extend([m1, m2])
+    e2.meetings.append(m1)
+    e3.meetings.append(m2)
+    
     # Many-to-many relationship between employee and project through assignment
+    a1 = Assignment(employee=e1, project=p1, role="Lead Developer", start_date=datetime.date(2023, 1, 15))
+    a2 = Assignment(employee=e2, project=p1, role="Backend Developer", start_date=datetime.date(2023, 2, 1))
+    a3 = Assignment(employee=e3, project=p2, role="Frontend Developer", start_date=datetime.date(2023, 3, 1))
+    a4 = Assignment(employee=e4, project=p2, role="Project Manager", start_date=datetime.date(2023, 1, 1))
+    
+    db.session.add_all([a1, a2, a3, a4])
+    db.session.commit()
